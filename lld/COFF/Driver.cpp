@@ -2011,6 +2011,10 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
     config->incremental = false;
   }
 
+  config->optRemarksFilename = args.getLastArgValue(OPT_opt_remarks_filename);
+  config->optRemarksPasses = args.getLastArgValue(OPT_opt_remarks_passes);
+  config->optRemarksFormat = args.getLastArgValue(OPT_opt_remarks_format);
+
   if (errorCount())
     return;
 

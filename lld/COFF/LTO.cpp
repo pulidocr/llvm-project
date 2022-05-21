@@ -97,6 +97,10 @@ lto::Config BitcodeCompiler::createConfig() {
   c.CSIRProfile = std::string(ctx.config.ltoCSProfileFile);
   c.RunCSIRInstr = ctx.config.ltoCSProfileGenerate;
   c.PGOWarnMismatch = ctx.config.ltoPGOWarnMismatch;
+  c.RemarksFilename = std::string(ctx.config.optRemarksFilename);
+  c.RemarksPasses = std::string(ctx.config.optRemarksPasses);
+  c.RemarksFormat = std::string(ctx.config.optRemarksFormat);
+
 
   if (ctx.config.saveTemps)
     checkError(c.addSaveTemps(std::string(ctx.config.outputFile) + ".",

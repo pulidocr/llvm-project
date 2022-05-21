@@ -411,6 +411,13 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
     linkPath = TC.GetProgramPath(Linker.str().c_str());
   }
 
+  const Driver &D = getToolChain().getDriver();
+  if (D.isUsingLTO()) {
+    assert(!Inputs.empty() && "Must have at least one input.");
+    addLTOOptions(getToolChain(), Args, CmdArgs, Output, Inputs[0],
+                  D.getLTOMode() == LTOK_Thin);
+  }
+
   auto LinkCmd = std::make_unique<Command>(
       JA, *this, ResponseFileSupport::AtFileUTF16(),
       Args.MakeArgString(linkPath), CmdArgs, Inputs, Output);

@@ -313,6 +313,10 @@ struct Configuration {
   bool pseudoRelocs = false;
   bool stdcallFixup = false;
   bool writeCheckSum = false;
+
+  llvm::StringRef optRemarksFilename;
+  llvm::StringRef optRemarksPasses;
+  llvm::StringRef optRemarksFormat;
 };
 
 } // namespace lld::coff

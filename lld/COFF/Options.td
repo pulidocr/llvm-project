@@ -28,6 +28,17 @@ multiclass B_priv<string name> {
   def _no : F<name#":no">;
 }
 
+// For options whose names are multiple letters, either one dash or
+// two can precede the option name except those that start with 'o'.
+class J<string name>: Joined<["--", "-"], name>;
+
+// Convenience classes for long options which only accept two dashes. For lld
+// specific or newer long options, we prefer two dashes to avoid collision with
+// short options. For many others, we have to accept both forms to be compatible
+// with GNU ld.
+class FF<string name> : Flag<["--"], name>;
+class JJ<string name>: Joined<["--"], name>;
+
 def align   : P<"align", "Section alignment">;
 def aligncomm : P<"aligncomm", "Set common symbol alignment">;
 def alternatename : P<"alternatename", "Define weak alias">;
@@ -288,6 +299,28 @@ def print_symbol_order: P<
 def wrap : P_priv<"wrap">;
 
 def vfsoverlay : P<"vfsoverlay", "Path to a vfsoverlay yaml file to optionally look for /defaultlib's in">;
+
+def opt_remarks_filename: Separate<["--"], "opt-remarks-filename">,
+  HelpText<"YAML output file for optimization remarks">;
+def opt_remarks_passes: Separate<["--"], "opt-remarks-passes">,
+  HelpText<"Regex for the passes that need to be serialized to the output file">;
+def opt_remarks_format: Separate<["--"], "opt-remarks-format">,
+  HelpText<"The format used for serializing remarks (default: YAML)">;
+def plugin_opt_mcpu_eq: J<"plugin-opt=mcpu=">;
+def lto_O: JJ<"lto-O">, MetaVarName<"<opt-level>">,
+  HelpText<"Optimization level for LTO">;
+
+def: J<"plugin-opt=opt-remarks-filename=">,
+  Alias<opt_remarks_filename>,
+  HelpText<"Alias for --opt-remarks-filename">;
+def: J<"plugin-opt=opt-remarks-passes=">,
+  Alias<opt_remarks_passes>,
+  HelpText<"Alias for --opt-remarks-passes">;
+def: J<"plugin-opt=opt-remarks-format=">,
+  Alias<opt_remarks_format>,
+  HelpText<"Alias for --opt-remarks-format">;
+def: J<"plugin-opt=O">, Alias<lto_O>, HelpText<"Alias for --lto-O">;
+
 
 // Flags for debugging
 def lldmap : F<"lldmap">;
